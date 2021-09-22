@@ -8,6 +8,10 @@
 4. Details paragraph: 
 Despite the enormous number of data records provided for testing, 15 million shipping records still might not be representative of the enormous number of shipments that go through Ebay every day (25 million). 
 5. Assessment paragraph: Our model was able to predict eBay shipping times with an accuracy of __ and we found that the most important features in predicting shipping times were X, Y, and Z.
+6. Ethics Component
+  - Environmental Implications of Fast Shipping: If we begin to predict fast shipping times, the shipping infrastructure will aim to complete them in a sort of self-fulfilling model. Rushing shipping procedures often results in a slew of non-sustainable methods such as shipping half-full boxes, a method that wastes shipping materials (boxes, foam peanuts, tape) and fuel for the transportation method. 
+  - Potential Bias in Dataset: Our full data set could, at most, provide one data point from 60% of eBay users. We do not know how eBay generated their dataset; if eBay pulled from a specifc region, then our model would likely be poor at predicting shipping times from other, not represented regions in the dataset.
+
 
 ### Project Description
 Accurate predictions of product delivery times is a basic a crucial aspect of customer service for any company that deals with the transpoortation of goods from seller to buyer. For eBay, predicting delivery times is especially difficult because shipments are made by over 25 million individual sellers across the globe who have different preferred carrieres, as well as different levels of proactiveness to package and ship good shortly thereafter purchase. The range of goods sold on eBay along with the variety of sellers and buyers makes this problem interesting and challenging. The objective is to estimate the number of calendar days it will take for a buyer to receive the product after payment is made:
