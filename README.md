@@ -18,14 +18,14 @@ We have created visualizations to help us better understand the distribution of 
   <img src="images/ShipmentMethodID.png" width="250" />
 </p>
 <p float="left">
-  <img src="images/DeclaredHandlingDays.png" width="300" />
-  <img src="images/CarrierMinimumEstimate.png" width="300" /> 
-  <img src="images/CarrierMaximumEstimate.png" width="300" />
+  <img src="images/DeclaredHandlingDays.png" width="250" />
+  <img src="images/CarrierMinimumEstimate.png" width="250" /> 
+  <img src="images/CarrierMaximumEstimate.png" width="250" />
 </p>
 <p float="left">
-  <img src="images/ShippingFee.png" width="300" />
-  <img src="images/Weight.png" width="300" /> 
-  <img src="images/ItemPrice.png" width="300" />
+  <img src="images/ShippingFee.png" width="250" />
+  <img src="images/Weight.png" width="250" /> 
+  <img src="images/ItemPrice.png" width="250" />
 </p>
 
 #### Shape and type of input/output
