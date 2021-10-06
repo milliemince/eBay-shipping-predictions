@@ -10,7 +10,15 @@ Thus far, we have trained a naive network that uses simple linear regression. Ex
 
 #### Data we will use 
 eBay has provided a training dataset containing 15 million shipment records and a test dataset containing 2.5 million shipment records. Because these records are confidential, we cannot link the entire dataset here. However, the features for each shipment are outlined [here](https://github.com/milliemince/eBay-shipping-predictions/blob/main/eBay_ML_Challenge_Dataset_2021/Annexure_2021.pdf).
-We have created visualizations to help us better understand the dataset. They can be found below (STILL NEED TO INSERT THESE!)
+We have created visualizations to help us better understand the distribution of features in the dataset:
+<table border="0">
+ <tr>
+    <td>image1</td>
+    <td>image2</td>
+    <td>image3</td>
+    <td>image4</td>
+ </tr>
+</table>
 
 #### Shape and type of input/output
 Our input is an *m x n* matrix where *n* = number of training instances = 15 million and *m* = number of features = 19.
