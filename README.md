@@ -13,9 +13,9 @@ eBay has provided a training dataset containing 15 million shipment records and 
 We have created visualizations to help us better understand the distribution of features in the dataset:
   
 <p float="left">
-  <img src="images/B2C_C2C.png" width="300" />
-  <img src="images/CategoryID.png" width="300" /> 
-  <img src="images/ShipmentMethodID.png" width="300" />
+  <img src="images/B2C_C2C.png" width="250" />
+  <img src="images/CategoryID.png" width="250" /> 
+  <img src="images/ShipmentMethodID.png" width="250" />
 </p>
 <p float="left">
   <img src="images/DeclaredHandlingDays.png" width="300" />
