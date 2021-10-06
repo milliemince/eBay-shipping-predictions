@@ -13,7 +13,7 @@ eBay has provided a training dataset containing 15 million shipment records and 
 We have created visualizations to help us better understand the dataset. They can be found below (STILL NEED TO INSERT THESE!)
 
 #### Shape and type of input/output
-Our input is an $n \times m$ matrix where $n$ = number of training instances = 15 million and $m$ = number of features = 19.
+Our input is an <img src="https://render.githubusercontent.com/render/math?math=n \times m"> matrix where *n* = number of training instances = 15 million and *m* = number of features = 19.
 The output of our network will be a single value: the prediction for the number of days the shipment will take.
 
 #### To consider
