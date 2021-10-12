@@ -38,7 +38,7 @@ def add_zip_distance_column(item_zip, buyer_zip):
     #df = pd.read_csv(file_name)
     item_zip_str = item_zip.apply(lambda x: str(x))
     buyer_zip_str = buyer_zip.apply(lambda x: str(x))
-    zip_distance = get_distance(item_zip_str, buyer_zip_str)
+    zip_distance = item_zip_str.apply(lambda x: get_distance(x, buyer_zip_str))
     # pd.DataFrame.to_csv(df, 'test_distance.csv')
     return zip_distance
 
