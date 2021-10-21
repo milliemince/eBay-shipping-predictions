@@ -1,6 +1,11 @@
 # Predicting eBay Delivery Times 
 ## Millie M, Meghna L, Hannah M, Nate D, Indiana H
 
+## Update II
+We have researched more into software such as XGBoost, SqueezeNet, and Fastai.tabular and how we can use them in the implementation of our network. We have also begun cleaning the data to make it more operable, such as converting string variables into numeric features and handling examples with missing or incorrect features, as well as implemented functions to find the distance between buyers and sellers given their zip codes. 
+
+Where previously we planned to handle training examples with missing or incorrect features by assigning them with average values based on the rest of the data, we might now simply omit such examples from the training set instead. We also want to further discuss which features we want to include and look into additional software possibilities such as CNN and RNN. 
+
 ## Introduction
 The economy of online shopping is bigger than it has ever been and continues to grow each year. It follows that the market for being able to deliver goods quickly and reliably is becoming more and more competitive. In addition to improving the overall flow of transactions, knowing when a package will be delivered is a major factor in customer satisfaction, making the ability to accurately predict delivery dates essential to companies such as eBay.
 
