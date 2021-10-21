@@ -2,9 +2,20 @@
 ## Millie M, Meghna L, Hannah M, Nate D, Indiana H
 
 ## Update II
-We have researched more into software such as XGBoost, SqueezeNet, and Fastai.tabular and how we can use them in the implementation of our network. We have also begun cleaning the data to make it more operable, such as converting string variables into numeric features and handling examples with missing or incorrect features, as well as implemented functions to find the distance between buyers and sellers given their zip codes. 
+We have also noticed several irregularities/missing data in our dataset and made several efforts to clean the data. These efforts include:
+- replacing missing `carrier_min_estimate` and `carrier_max_estimate` with the average of estimates from that same `shipment_method_id`.
+- replacing missing `declared_handling_days` with averages from the same `seller_id`
+- converting features represented as strings (i.e. `b2c_c2c`, `package_size`) to discrete numeric encodings
+- using `weight_units` to convert all weights in `weight` to the same unit, so we can drop the `weight_unit` feature entirely
+- replacing missing weights with the average weight for shipments from the same `category_id`
 
-Where previously we planned to handle training examples with missing or incorrect features by assigning them with average values based on the rest of the data, we might now simply omit such examples from the training set instead. We also want to further discuss which features we want to include and look into additional software possibilities such as CNN and RNN. 
+While we have currently handled training examples with missing or incorrect features by assigning them with average values based on the rest of the data, we will need to analyze how much noise this adds to our dataset. If the noise is too great, we might now simply omit such examples from the training set instead.
+
+We have also begun feature engineering, and have used the `item_zip` and `buyer_zip` to engineer a new feature: `zip_distance` that quantifies the distance between the two zipcodes. After meeting with our TA, we've decided that a better stategy may be to look in to libraries that quantify the route time between two zip codes, rather than just the linear distance between them. 
+
+We have researched more into software such as XGBoost, SqueezeNet, and Fastai.tabular and how we can use them in the implementation of our network. We've used XGBoost on our cleaned data, and saw improved performance from the naive linear regression models. eBay has provided a unique loss function that they will use to evaluate our model, of which the baseline (random guessing) loss is 0.75. XGBoost was able to improve this loss to 0.50. We plan to look into packages that can help us visualize the best trees produced by XGBoost to interpret which features are most important. This knowledge could help us more strategically engineer our features. 
+
+Once we have completed our feature engineering, we want to look into additional neural network possibilities such as CNN and RNN. 
 
 ## Introduction
 The economy of online shopping is bigger than it has ever been and continues to grow each year. It follows that the market for being able to deliver goods quickly and reliably is becoming more and more competitive. In addition to improving the overall flow of transactions, knowing when a package will be delivered is a major factor in customer satisfaction, making the ability to accurately predict delivery dates essential to companies such as eBay.
