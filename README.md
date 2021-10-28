@@ -1,6 +1,40 @@
 # Predicting eBay Delivery Times 
 ## Millie M, Meghna L, Hannah M, Nate D, Indiana H
 
+## Methods Outline
+# Overview
+To create our neural network model and attain our results, we used a number of tools for the different stages of our project. To construct our model, we used Pytorch, sklearn, and Jupyter notebooks for most of our development. We ran our code on the Pomona High Performance Computing servers to utilize more GPU power. We used linear regression models with regularization penalties, as well as XGBoost, to infer which features were the most important for predicting (a) the handling time, and (b) the shipment time. Finally, we plan to use this information to engineer our features that will be used as input to a CNN.
+
+# Dataset
+Our dataset was provided by eBay. It contains 15 million shipment records and a validation dataset containing 2.5 million shipment records. Each shipment record contains 19 features. To visualize our dataset, we used pandas and matplotlib. This allowed us to generate graphs for each feature in our dataset, which are included in our first update.
+
+# Goal
+Our goal is to use this dataset to create a CNN model that can accurately predict the delivery time (in days) of an eBay shipment. 
+
+# Cleaning
+To clean our dataset, we first needed to handle irregularities and missing data. To do so, we omitted some examples, and replaced other examples with averages from similar training instances. For example:
+- replacing missing `carrier_min_estimate` and `carrier_max_estimate` with the average of estimates from that same `shipment_method_id`.
+- replacing missing `declared_handling_days` with averages from the same `seller_id`
+- converting features represented as strings (i.e. `b2c_c2c`, `package_size`) to discrete numeric encodings
+- using `weight_units` to convert all weights in `weight` to the same unit, so we can drop the `weight_unit` feature entirely
+- replacing missing weights with the average weight for shipments from the same `category_id`
+
+# Creating new features
+We also created a new feature:` zip_distance`, using the `item_zip` and `buyer_zip`. The feature `zip_distance` quantifies the haversine distance between the two zip codes (distance across the surface of a sphere). We utilized the package uszipcode to retrieve a latitude and longitude for zip codes in the packages database and a package called mpu to calculate the haversine distance between the two points. For zip codes that were not in the database and returned NaNs, we temporarily decided to calculate zip_distance as the distance between the middle of the two states involved in the sale.
+
+# Feature engineering
+Although we began by creating new features we thought to be important, we wanted to ensure that those features were necessary for the model. To proceed with this process, we looked at feature importance in both a linear model and a decision tree through XGBoost.
+
+In the linear regression model, we analyzed the coefficients assigned to each input variable. The larger the assigned coefficient, the more ‘important’ the input is for determining the output. We additionally ran a lasso regression for this same purpose, hoping to identify any highly unnecessary inputs and remove over-dependency on highly weighted inputs. However, despite scaling our data, we ran into the issue of having all but one feature assigned a non-zero coefficient. 
+
+We also used XGBoost to delineate the most important features. The features nearest the top of the tree are more important than those near the bottom. We ran multiple trees with multiple combinations of variables to see which ones repeatedly showed up at the top of the tree, despite being paired with other variables. 
+
+# CNN
+We then used the important features identified by our regression model and XGBoost as the features we would feed into a CNN with X layers. 
+ 
+# Loss function
+After training our model, we used the loss function provided by eBay of which the baseline (random guessing) loss is 0.75. 
+
 ## Update II
 We have also noticed several irregularities/missing data in our dataset and made several efforts to clean the data. These efforts include:
 - replacing missing `carrier_min_estimate` and `carrier_max_estimate` with the average of estimates from that same `shipment_method_id`.
