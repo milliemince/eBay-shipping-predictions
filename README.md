@@ -1,6 +1,28 @@
 # Predicting eBay Delivery Times 
 ## Millie M, Meghna L, Hannah M, Nate D, Indiana H
 
+##Discussion Outline
+### Data
+In our project, we trained X models to try to find the best architecture to predict shipping times. We can compare these models by looking at the loss for each of them.
+
+### Model Evaluation
+To evaluate our model, we created scatter plots to visualize the predicted vs. actual shipping dates, and categorized these by product category and price. 
+We also created a scatter plot of predicted vs actual shipping dates, categorized by product category or price to look at our predictions. 
+We tested this on the quiz data that was provided by eBay and had the following results.
+
+We will also see if the model performs well on certain subsects of the data, aka, bias!
+
+### Comparison
+To see how our work compares to others, we looked at the other competitors in the eBay competition and the leaderboard. 
+
+### Findings
+We have shown that it is possible to predict delivery times using XGBoost. To support our claim, we can look at the accuracy of our predictions. 
+
+We have also shown that it is possible to determine the most important features in predicting delivery times for the eBay dataset. 
+
+We can look at the weights for each of the features in our dataset after using XGBoost’s decision trees to determine the highest weighted features. *insert tutorial about using XGBoost trees to find the most important features*
+
+
 ## Methods Outline
 ### Overview
 To create our neural network model and attain our results, we used a number of tools for the different stages of our project. To construct our model, we used Pytorch, sklearn, and Jupyter notebooks for most of our development. We ran our code on the Pomona High Performance Computing servers to utilize more GPU power. We used linear regression models with regularization penalties, as well as XGBoost, to infer which features were the most important for predicting (a) the handling time, and (b) the shipment time. Finally, we plan to use this information to engineer our features that will be used as input to a CNN.
@@ -31,6 +53,19 @@ We also used XGBoost to delineate the most important features. The features near
 
 ### CNN
 We then used the important features identified by our regression model and XGBoost as the features we would feed into a CNN with X layers. 
+
+### XGBoost and Catboost
+Another tool we’ve used is a random forest / decision tree package called Catboost. This is similar to XGBoost, however it focuses on categorical data (hence the “cat” in Catboost), discrete data that represents categories rather than continuous numerical data. This is useful to us because several of our important features are categorical, such as zipcodes, package size (small, medium, large), and item type.
+Upon running a Catboost model on a subset of our data (20,000 rows) with default parameters, we were able to achieve a loss of 0.49 (using the loss function provided by eBay). This is a promising number, considering the small subset of data used and lack of fine tuning.
+
+With fine tuned XGBoost, we were only able to get a loss of 0.51. The contrast of Catboost’s performance shows how a categorically tailored package seems to be a better choice. 
+
+Catboost also includes an overfitting-detection tool. This stops more trees from being created if the model begins to perform worse. 
+
+According to Catboost documentation, the best parameters to fine tune are: learning rate, L2 regularization (coefficient of the L2 regularization term of the cost function), random strength (the amount of randomness to use for scoring splits when the tree structure is selected), bagging temperature (which impacts how random weights are assigned), border count (the number of splits for numerical features), and tree growing policy (which impacts the symmetry of the trees). We plan on fine tuning these parameters in order to better Catboost’s performance on our data. 
+
+We plan on using Catboost either as part of our final model, or just to determine feature importance. 
+
  
 ### Loss function
 After training our model, we used the loss function provided by eBay of which the baseline (random guessing) loss is 0.75. 
