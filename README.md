@@ -3,14 +3,18 @@
 
 ## Discussion Outline
 ### Data
-In our project, we trained X models to try to find the best architecture to predict shipping times. We can compare these models by looking at the loss for each of them.
+In our project, we trained X (right now, 4) models to try to find the best architecture to predict shipping times. We compared these models by evaluating the loss for each of them. The loss function was provided by eBay, and it is essentially an average of days off, where late predictions are weighted more heavily than early predictions. 
 
 ### Model Evaluation
-To evaluate our model, we created scatter plots to visualize the predicted vs. actual shipping dates, and categorized these by product category and price. 
-We also created a scatter plot of predicted vs actual shipping dates, categorized by product category or price to look at our predictions. 
+We created a scatter plot of predicted vs actual shipping dates, categorized by product category or price to look at our predictions. 
 We tested this on the quiz data that was provided by eBay and had the following results.
+We will also determined whether the model performed well on certain subsects of the data, analyzing whether some subsets had bias.
 
-We will also see if the model performs well on certain subsects of the data, aka, bias!
+The models we used were:
+1. Linear Regression
+2. Fully Connected Neural Network
+3. XGBoost (Decision Tree Gradient Boosting Algorithm)
+4. CatBoost (Another Decision Tree Gradient Boosting Algorithm that deals better with categorical features)
 
 ### Comparison
 To see how our work compares to others, we looked at the other competitors in the eBay competition and the leaderboard. 
@@ -18,10 +22,12 @@ To see how our work compares to others, we looked at the other competitors in th
 ### Findings
 We have shown that it is possible to predict delivery times using XGBoost. To support our claim, we can look at the accuracy of our predictions. 
 
-We have also shown that it is possible to determine the most important features in predicting delivery times for the eBay dataset. 
+We have also shown that it is possible to determine the most important features in predicting delivery times for the eBay dataset using Random Forests with boosting (using XGBoost).
 
-We can look at the weights for each of the features in our dataset after using XGBoost’s decision trees to determine the highest weighted features. *insert tutorial about using XGBoost trees to find the most important features*
+We can look at the weights for each of the features in our dataset after using XGBoost’s decision trees to determine the highest weighted features. 
+XGBoost learned many boosted decision trees on random subsets of the data. Features that are evaluated higher up in the trees correspond to the features which the model has learned are more important. We have found that the most important features are `handling_days` and `carrier_max_estimate`, followed by some mid-tier importance features such as `weight`, `zip_distance`, and `shipment_method_id`.
 
+Our dataset has many categorical features, like `shipment_method_id`, `item_zip`, `buyer_zip`, and `b2c_c2c`. XGBoost performed relatively well, which motivated finding a similar algorithm that could better handle these categorical features. Our findings (without yet tuning CatBoost) show that this is true.
 
 ## Methods Outline
 ### Overview
