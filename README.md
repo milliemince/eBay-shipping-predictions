@@ -1,7 +1,7 @@
 # Predicting eBay Delivery Times 
 ## Millie M, Meghna L, Hannah M, Nate D, Indiana H
 
-##Discussion Outline
+## Discussion Outline
 ### Data
 In our project, we trained X models to try to find the best architecture to predict shipping times. We can compare these models by looking at the loss for each of them.
 
