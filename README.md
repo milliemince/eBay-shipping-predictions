@@ -92,10 +92,15 @@ We decided to start with a naive linear regression. Despite knowing that a linea
 
 The following table shows the coefficient values learned for each feature in the 3 regression models:
 
-|    | b2c_c2c | shipping_fee | carrier_min_estimate | carrier_max_estimate | category_id | item_price | quantity | weight   |
-|----|---------|--------------|----------------------|----------------------|-------------|------------|----------|----------|
-| SR | 0.2635  | 0.0030       | 0.2217               | 0.4032               | 0.0183      | -0.0001    | 0.003    | -9.5e-06 |
-| LR | 0.0     | 0.0          | 0.0                  | 0.0                  | 0.005       | 0.0001     | 0        | 1.9e-06  |
+|    | b2c_c2c | shipping_fee | carrier_min_estimate | carrier_max_estimate |
+|----|---------|--------------|----------------------|----------------------|
+| SR | 0.2635  | 0.0030       | 0.2217               | 0.4032               | 
+| LR | 0.0     | 0.0          | 0.0                  | 0.0                  | 
+
+|    | category_id | item_price | quantity | weight   |
+|----|-------------|------------|----------|----------|
+| SR | 0.0183      | -0.0001    | 0.003    | -9.5e-06 |
+| LR |0.005        | 0.0001     | 0        | 1.9e-06  |
 
 Standard linear regression suggests that carrier_max_estimate, carrier_min_estimate, and b2c_c2c are the most important features. It also learned that shipping_fee and quantity are of minimal, but non-zero importance. The remainder of the features are found to have no importance. However, these models do not perform well relative to the benchmark random classifier loss provided by eBay: 0.75. Since the model cannot perform better than random guessing, the feature importances learned from it should be taken with a grain of salt.
 
