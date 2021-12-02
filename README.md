@@ -80,10 +80,11 @@ We also used XGBoost to delineate the most important features. The features near
 
 ## Models
 
-###Linear Regression Model
+### Linear Regression Model
+TODO
 
-
-###Fully Connected Model 
+### Fully Connected Model 
+TODO 
 
 Num Layers
 Type of Layers
@@ -91,9 +92,9 @@ Learning rate
 Num epochs
 
 ### XGBoost
-
-
-###CatBoost
+TODO 
+ 
+### CatBoost
 Another tool we used is a random forest/decision tree package called Catboost. This is similar to XGBoost, however it focuses on categorical data (hence the “cat” in Catboost). This is discrete data that represents categories rather than continuous numerical data. This tool was useful to us because several of our important features are categorical, such as zipcodes, package size (small, medium, large), and item type.
 
 According to Catboost documentation, the best parameters to fine tune are: learning rate, L2 regularization (coefficient of the L2 regularization term of the cost function), random strength (the amount of randomness to use for scoring splits when the tree structure is selected), bagging temperature (which impacts how random weights are assigned), border count (the number of splits for numerical features), and tree growing policy (which impacts the symmetry of the trees). We used this data to fine tune these parameters in order to obtain better performance on our data. 
@@ -101,7 +102,7 @@ According to Catboost documentation, the best parameters to fine tune are: learn
 Upon a preliminary test of a Catboost model on a subset of our data (20,000 rows) with default parameters, we were able to achieve a loss of 0.49 (using the loss function provided by eBay). This is a promising number, considering the small subset of data used and lack of fine tuning. The contrast of Catboost’s performance shows how a categorically tailored package seems to be a better choice. Catboost also includes an overfitting-detection tool. This stops more trees from being created if the model begins to perform worse. 
 
 
-###Models
+### Training
 Once we had cleaned and processed our data, we trained 4 models to compare the results from each one. These models were:
 
 1. Linear Regression
@@ -133,16 +134,17 @@ Catboost had a loss of ___ after fine tuning.
 
 ## Discussion
 
-### Model Evaluation - Feature Importance
-To evaluate our models, we first looked at the features that each of the models deemed to be the most important. This is so we can determine whether the models performed well on certain subsets of the data, analyzing whether some subsets had bias, or if different models prioritized certain features over others. MILLIE
+### Model Evaluation: Feature Importance
+To evaluate our models, we first looked at the features that each of the models deemed to be the most important. This is so we can determine whether the models performed well on certain subsets of the data, analyzing whether some subsets had bias, or if different models prioritized certain features over others. 
 
 ’We learned it is possible to determine the most important features in predicting delivery times for the eBay dataset using Random Forests with boosting (using XGBoost). We can look at the weights for each of the features in our dataset after using XGBoost’s decision trees to determine the highest weighted features. 
 
+TODO
 *insert table maybe for feature importance once we complete model runs*
 
 XGBoost learned many boosted decision trees on random subsets of the data. Features that are evaluated higher up in the trees correspond to the features which the model has learned are more important. We have found that the most important features are `handling_days` and `carrier_max_estimate`, followed by some mid-tier importance features such as `weight`, `zip_distance`, and `shipment_method_id`.
 
-### Model Evaluations - Predictions
+### Model Evaluation: Predictions
 
 We also wanted to compare how the models might differ in effectiveness or use case. To do so, we can look at the kinds of predictions that each model made to see if there are any key differences. We created a scatter plot of predicted vs actual shipping dates, categorized by product category or price to look at our predictions for each model.
 
@@ -152,9 +154,10 @@ Our dataset has many categorical features, like `shipment_method_id`, `item_zip`
 
 
 ### Comparison
+TODO
 To see how our work compares to others, we looked at the other competitors in the eBay competition and the leaderboard. 
 Comparing our models to the other teams, we found that our models performed ____
-*insert image of the other competitors' scores?* MILLIE 
+*insert image of the other competitors' scores?*  
 
 
 ### Ethics Discussion
