@@ -110,7 +110,7 @@ Once we had cleaned and processed our data, we trained 4 models to compare the r
 After training our models, we used the loss function provided by eBay of which the baseline (random guessing) loss is 0.75. This loss function is essentially an average of how many days the prediction was off by, where late predictions are weighted more heavily than early predictions. Our goal was to obtain a loss that is significantly lower than 0.75 for our model. 
 
 
-##Results
+## Results
 
 In our project, we trained four models to try to find the best architecture to predict shipping times. We ran our cleaned data through each model and compared effectiveness. We compared these models by evaluating the loss for each of them. 
 
@@ -128,7 +128,7 @@ Catboost had a loss of ___ after fine tuning.
 
 
 
-##Discussion
+## Discussion
 
 ### Model Evaluation - Feature Importance
 To evaluate our models, we first looked at the features that each of the models deemed to be the most important. This is so we can determine whether the models performed well on certain subsets of the data, analyzing whether some subsets had bias, or if different models prioritized certain features over others. MILLIE
