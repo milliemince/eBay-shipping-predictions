@@ -13,6 +13,7 @@ The economy of online shopping is bigger than it has ever been and continues to 
 
 The process of achieving this, however, poses many challenges. In the case of eBay, the majority of transactions are carried out between individual sellers and buyers, often resulting in the data for goods and their delivery being inconsistently recorded. This, in addition to packages being processed by a variety of different delivery services, means that data labels are frequently missing or incorrect. Further, the shipment date is largely left to the sole decision of each individual seller, resulting in a high degree of variability.
 
+![image of shipping process](/images/diagram.png)
 
 Our team will provide a solution to these problems and provide a model to enable the accurate prediction of delivery dates using machine learning. Because predicted values are in the range of the number of days between shipment and delivery, we will employ an architecture suitable for a discrete response rather than a continuous one.
 
@@ -46,7 +47,9 @@ To create our neural network model and attain our results, we used a number of t
 ### Dataset
 Our dataset was provided by [eBay](https://eval.ai/web/challenges/challenge-page/1205/overview). It contains 15 million shipment records and a validation dataset containing 2.5 million shipment records. Each shipment record contains 19 features. To visualize our dataset, we used pandas and matplotlib. This allowed us to generate graphs for each feature in our dataset. Some of the images we generated include the category ID (which broadly classifies the type of item purchased), the item price, and the shipment method ID (which signifies the type of shipment service declared by the seller to be used for the item). 
 
-
+![image of shipping process](/images/CategoryID.png)
+![image of shipping process](/images/ItemPrice.png)
+![image of shipping process](/images/ShipmentMethodID.png)
 
 ### Goal
 Our goal was to use this dataset to create a model that can accurately predict the delivery time (in days) of an eBay shipment. To accomplish this goal, we broke our problem down into a few steps:
