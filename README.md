@@ -163,7 +163,7 @@ Catboost had a loss of ___ after fine tuning.
 | Model      | Loss |
 | ----------- | ----------- |
 | Linear Regression NN Model      | __       |
-| Fully Connected Neural Network   | __        |
+| Fully Connected Neural Network   | 0.453        |
 | XGBoost   | __        |
 | CatBoost   | __        |
 
