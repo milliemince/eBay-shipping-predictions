@@ -105,12 +105,7 @@ The following table shows the coefficient values learned for each feature in the
 Standard linear regression suggests that carrier_max_estimate, carrier_min_estimate, and b2c_c2c are the most important features. It also learned that shipping_fee and quantity are of minimal, but non-zero importance. The remainder of the features are found to have no importance. However, these models do not perform well relative to the benchmark random classifier loss provided by eBay: 0.75. Since the model cannot perform better than random guessing, the feature importances learned from it should be taken with a grain of salt.
 
 ### Fully Connected Model 
-TODO 
-
-Num Layers
-Type of Layers
-Learning rate
-Num epochs
+We additionally created a fully connected model with 3 linear hidden layers of 24, 16, and 8 neurons respectively, each hidden layer followed by the ReLu activation function. Using the custom criterion and Adam as the optimizer with a learning rate of 0.001 and batch size of 128, the model reached a loss of 0.453 after 100 epochs over 800,000 training and 200,000 validation examples with the input features 'carrier_min_estimate', ’carrier_max_estimate', ‘weight', ‘zip_distance', and ‘handling_days'.
 
 ### XGBoost
 XGBoost is a popular gradient boosting decision tree algorithm that has been featured in the winning submissions of many machine learning competitions. Essentially, XGBoost is an ensemble method that combines several weak learners (the individual decision trees) into a strong one. Gradients come into play when each new tree is built; subsequent trees are fit using the residual errors made by predecessors. Another advantage of XGBoost is its interpretability. Trees are easy to understand, and they are great models for discerning feature importance. The higher up a feature is on the various decision trees, the more important that feature is. As each tree is built, splits are decided based on what “decision” (i.e. is b2c_c2c true or false?) best evenly partition the data. This is why features high up in the tree are indicators of the most important features. XGBoost performs well on various datasets, and we wanted to explore how it would perform on the eBay dataset. 
