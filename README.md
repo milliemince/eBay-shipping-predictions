@@ -177,7 +177,7 @@ To evaluate our models, we first looked at the features that each of the models 
 ’We learned it is possible to determine the most important features in predicting delivery times for the eBay dataset using Random Forests with boosting (using XGBoost). We can look at the weights for each of the features in our dataset after using XGBoost’s decision trees to determine the highest weighted features. 
 
 TODO
-*insert table maybe for feature importance once we complete model runs*
+*insert table for feature importance once we complete model runs*
 
 XGBoost learned many boosted decision trees on random subsets of the data. Features that are evaluated higher up in the trees correspond to the features which the model has learned are more important. We have found that the most important features are `handling_days` and `carrier_max_estimate`, followed by some mid-tier importance features such as `weight`, `zip_distance`, and `shipment_method_id`.
 
@@ -194,7 +194,7 @@ Our dataset has many categorical features, like `shipment_method_id`, `item_zip`
 TODO
 To see how our work compares to others, we looked at the other competitors in the eBay competition and the leaderboard. 
 Comparing our models to the other teams, we found that our models performed ____
-*insert image of the other competitors' scores?*  
+*insert image of the other competitors' scores after final runs*  
 
 
 ### Ethics Discussion
