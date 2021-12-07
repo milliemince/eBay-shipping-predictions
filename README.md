@@ -109,6 +109,8 @@ Standard linear regression suggests that `carrier_max_estimate`, `carrier_min_es
 ### Fully Connected Model 
 We additionally created a fully connected model with 3 linear hidden layers of 24, 16, and 8 neurons respectively, each hidden layer followed by the ReLu activation function. Using the custom criterion and Adam as the optimizer with a learning rate of 0.001 and batch size of 128, the model reached a loss of 0.453 after 100 epochs over 800,000 training and 200,000 validation examples with the input features 'X2X', 'carrier_min_estimate', ’carrier_max_estimate', ‘weight', ‘zip_distance', and ‘handling_days'.
 
+![image of shipping process](/images/NN.png)
+
 ### XGBoost
 XGBoost is a popular gradient boosting decision tree algorithm that has been featured in the winning submissions of many machine learning competitions. Essentially, XGBoost is an ensemble method that combines several weak learners (the individual decision trees) into a strong one. Gradients come into play when each new tree is built; subsequent trees are fit using the residual errors made by predecessors. Another advantage of XGBoost is its interpretability. Trees are easy to understand, and they are great models for discerning feature importance. The higher up a feature is on the various decision trees, the more important that feature is. As each tree is built, splits are decided based on what “decision” (i.e. is `b2c_c2c` true or false?) best evenly partition the data. This is why features high up in the tree are indicators of the most important features. XGBoost performs well on various datasets, and we wanted to explore how it would perform on the eBay dataset. 
 
@@ -194,6 +196,8 @@ Our dataset has many categorical features, like `shipment_method_id`, `item_zip`
 ### Comparison
 To see how our work compares to others, we looked at the other competitors in the eBay competition and the leaderboard. It should be noted that our competitors’ results at this time do not necessarily signify the best model possible, for the competition does not end for another month, rather they signify the best competing models at the time of submission of our project.
 Comparing our models to the other teams, we found that our best model (CatBoost) resulted in a loss around the 50th percentile of our competitor’s models. The best competitor’s model had a loss 0.05642352 less than our CatBoost model.
+
+![image of shipping process](/images/Competitors.png)
 
 
 ### Ethics Discussion
