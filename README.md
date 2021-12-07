@@ -83,53 +83,53 @@ We also used XGBoost to delineate the most important features. The features near
 After our data was clean, we began trying different models to see what was most effective and gave the best results.
 
 ### Linear Regression Model
-We decided to start with a naive linear regression. Despite knowing that a linear model could probably not correctly learn this large, complex, real-world data set, linear regression is a powerful algorithm that could at least learn relative feature importance. We used three types of linear regression: (1) standard regression without weight decay, and (2) lasso regression (using L2 penalty). Lasso regression has a an L1 weight decay penalty, and thus tends to push irrelevant features’ coefficients to 0. The results of the 3 linear regression models are as follows:
+We decided to start with a naive linear regression. Despite knowing that a linear model could probably not correctly learn this large, complex, real-world data set, linear regression is a powerful algorithm that could at least learn relative feature importance. We used two types of linear regression: (1) standard regression without weight decay, and (2) lasso regression (using L2 penalty). Lasso regression has a an L1 weight decay penalty, and thus tends to push irrelevant features’ coefficients to 0. The results of the two linear regression models are as follows:
 
 |       | Test Set Loss |
 | ----------- | ----------- |
 | Standard Linear Regression  | 0.82    |
 | Lasso Regression | 0.89        |
 
-The following table shows the coefficient values learned for each feature in the 3 regression models:
+The following table shows the coefficient values learned for each feature in the two regression models:
 
-|    | b2c_c2c | shipping_fee | carrier_min_estimate | carrier_max_estimate |
+|    | `b2c_c2c` | `shipping_fee` | `carrier_min_estimate` | `carrier_max_estimate` |
 |----|---------|--------------|----------------------|----------------------|
 | SR | 0.2635  | 0.0030       | 0.2217               | 0.4032               | 
 | LR | 0.0     | 0.0          | 0.0                  | 0.0                  | 
 
-|    | category_id | item_price | quantity | weight   |
+|    | `category_id` | `item_price` | `quantity` | `weight`   |
 |----|-------------|------------|----------|----------|
 | SR | 0.0183      | -0.0001    | 0.003    | -9.5e-06 |
 | LR |0.005        | 0.0001     | 0        | 1.9e-06  |
 
-Standard linear regression suggests that carrier_max_estimate, carrier_min_estimate, and b2c_c2c are the most important features. It also learned that shipping_fee and quantity are of minimal, but non-zero importance. The remainder of the features are found to have no importance. However, these models do not perform well relative to the benchmark random classifier loss provided by eBay: 0.75. Since the model cannot perform better than random guessing, the feature importances learned from it should be taken with a grain of salt.
+Standard linear regression suggests that `carrier_max_estimate`, `carrier_min_estimate`, and `b2c_c2c` are the most important features. It also learned that `shipping_fee` and quantity are of minimal, but non-zero importance. The remainder of the features are found to have no importance. However, these models do not perform well relative to the benchmark random classifier loss provided by eBay: 0.75. Since the model cannot perform better than random guessing, the feature importances learned from it should be taken with a grain of salt.
 
 ### Fully Connected Model 
 We additionally created a fully connected model with 3 linear hidden layers of 24, 16, and 8 neurons respectively, each hidden layer followed by the ReLu activation function. Using the custom criterion and Adam as the optimizer with a learning rate of 0.001 and batch size of 128, the model reached a loss of 0.453 after 100 epochs over 800,000 training and 200,000 validation examples with the input features `carrier_min_estimate`, `carrier_max_estimate`, `weight`, `zip_distance`, and `handling_days`.
 
 ### XGBoost
-XGBoost is a popular gradient boosting decision tree algorithm that has been featured in the winning submissions of many machine learning competitions. Essentially, XGBoost is an ensemble method that combines several weak learners (the individual decision trees) into a strong one. Gradients come into play when each new tree is built; subsequent trees are fit using the residual errors made by predecessors. Another advantage of XGBoost is its interpretability. Trees are easy to understand, and they are great models for discerning feature importance. The higher up a feature is on the various decision trees, the more important that feature is. As each tree is built, splits are decided based on what “decision” (i.e. is b2c_c2c true or false?) best evenly partition the data. This is why features high up in the tree are indicators of the most important features. XGBoost performs well on various datasets, and we wanted to explore how it would perform on the eBay dataset. 
+XGBoost is a popular gradient boosting decision tree algorithm that has been featured in the winning submissions of many machine learning competitions. Essentially, XGBoost is an ensemble method that combines several weak learners (the individual decision trees) into a strong one. Gradients come into play when each new tree is built; subsequent trees are fit using the residual errors made by predecessors. Another advantage of XGBoost is its interpretability. Trees are easy to understand, and they are great models for discerning feature importance. The higher up a feature is on the various decision trees, the more important that feature is. As each tree is built, splits are decided based on what “decision” (i.e. is `b2c_c2c` true or false?) best evenly partition the data. This is why features high up in the tree are indicators of the most important features. XGBoost performs well on various datasets, and we wanted to explore how it would perform on the eBay dataset. 
 
 Feature importances learned by XGBoost:
 
 | Feature                | Feature Importance  |
 |------------------------|---------------------|
-| b2c_c2c                | 0.015656            |
-| seller_id              | 0.047507            |
-| declared_handling_days | 0.042284            |
-| shipment_method_id     | 0.035131            |
-| shipping_fee           | 0.028294            |
-| carrier_min_estimate   | 0.044301            |
-| carrier_max_estimate   | 0.055198            |
-| item_zip               | 0.059736            |
-| buyer_zip              | 0.028275            |
-| category_id            | 0.022790            |
-| item_price             | 0.042802            |
-| quantity               | 0.047650            |
-| weight                 | 0.057305            |
-| package_size           | 0.020258            |
+| `b2c_c2c `               | 0.015656            |
+| `seller_id`             | 0.047507            |
+| `declared_handling_days` | 0.042284            |
+| `shipment_method_id`     | 0.035131            |
+| `shipping_fee`           | 0.028294            |
+| `carrier_min_estimate`   | 0.044301            |
+| `carrier_max_estimate`   | 0.055198            |
+| `item_zip `              | 0.059736            |
+| `buyer_zip`              | 0.028275            |
+| `category_id`            | 0.022790            |
+| `item_price`             | 0.042802            |
+| `quantity`               | 0.047650            |
+| `weight`                 | 0.057305            |
+| `package_size`           | 0.020258            |
 
-By far the most importance feature learned by XGBoost is handling days, a feature we engineered from the difference in acceptance_carrier_timestamp and payment_date (i.e. the number of days between the time the package was accepted by the shipping carrier and the time that the order was placed). Following this, it seems that weight, item_zip, buyer_zip and carrier_max_estimate are also important. The only features that XGBoost has learned to have lower or minimal importance are buyer_zip_median_income, item_zip_pop_density, package_size, category_id, buyer_zip, shipping_fee, and b2c_c2c. We can, to some extent, trust that the feature importances learned by XGBoost carry some weight, because the model was able to achieve a loss of 0.50, a large improvement from the linear regression models.
+By far the most importance feature learned by XGBoost is handling days, a feature we engineered from the difference in `acceptance_carrier_timestamp` and `payment_date` (i.e. the number of days between the time the package was accepted by the shipping carrier and the time that the order was placed). Following this, it seems that `weight`, `item_zip`, `buyer_zip` and `carrier_max_estimate` are also important. The only features that XGBoost has learned to have lower or minimal importance are `buyer_zip_median_incom`, `item_zip_pop_density`, `package_size`, `category_id`, `buyer_zip`, `shipping_fee`, and `b2c_c2c`. We can, to some extent, trust that the feature importances learned by XGBoost carry some weight, because the model was able to achieve a loss of 0.50, a large improvement from the linear regression models.
  
 ### CatBoost
 Another tool we used is a random forest/decision tree package called Catboost. This is similar to XGBoost, however it focuses on categorical data (hence the “cat” in Catboost). This is discrete data that represents categories rather than continuous numerical data. This tool was useful to us because several of our important features are categorical, such as zipcodes, package size (small, medium, large), and item type.
@@ -162,7 +162,7 @@ Catboost had a loss of ___ after fine tuning.
 
 | Model      | Loss |
 | ----------- | ----------- |
-| Linear Regression NN Model      | __       |
+| Linear Regression Model      | __       |
 | Fully Connected Neural Network   | 0.453        |
 | XGBoost   | __        |
 | CatBoost   | __        |
