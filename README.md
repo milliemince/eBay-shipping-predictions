@@ -59,6 +59,8 @@ Our goal was to use this dataset to create a model that can accurately predict t
  <li>Creating new features </li>
  <li>Determining feature importance </li>
  </ol>
+ 
+ In all of the following models, the word 'loss' can be interpreted as *the weighted average absolute error of the delivery predictions in days*. 
 
 
 ### Cleaning our data
@@ -104,10 +106,10 @@ The following table shows the coefficient values learned for each feature in the
 | SR | 0.0183      | -0.0001    | 0.003    | -9.5e-06 |
 | LR |0.005        | 0.0001     | 0        | 1.9e-06  |
 
-Standard linear regression suggests that `carrier_max_estimate`, `carrier_min_estimate`, and `b2c_c2c` are the most important features. It also learned that `shipping_fee` and quantity are of minimal, but non-zero importance. The remainder of the features are found to have no importance. However, these models do not perform well relative to the benchmark random classifier loss provided by eBay: 0.75. The models only performed better than a random classifier by 0.07 and 0.14 respectively. 
+Standard linear regression suggests that `carrier_max_estimate`, `carrier_min_estimate`, and `b2c_c2c` are the most important features. It also learned that `shipping_fee` and quantity are of minimal, but non-zero importance. The remainder of the features are found to have no importance. However, these models do not perform well relative to the benchmark random classifier loss provided by eBay: 0.75 (the weighted average absolute error of the delivery predictions in days). The models only performed better than a random classifier by 0.07 and 0.14 respectively. 
 
 ### Fully Connected Model 
-We additionally created a fully connected model with 3 linear hidden layers of 24, 16, and 8 neurons respectively, each hidden layer followed by the ReLu activation function. Using the custom criterion and Adam as the optimizer with a learning rate of 0.001 and batch size of 128, the model reached a loss of 0.453 after 100 epochs over 800,000 training and 200,000 validation examples with the input features 'X2X', 'carrier_min_estimate', ’carrier_max_estimate', ‘weight', ‘zip_distance', and ‘handling_days'.
+We additionally created a fully connected model with 3 linear hidden layers of 24, 16, and 8 neurons respectively, each hidden layer followed by the ReLu activation function. Using the custom criterion and Adam as the optimizer with a learning rate of 0.001 and batch size of 128, the model reached a loss of 0.453 (the weighted average absolute error of the delivery predictions in days) after 100 epochs over 800,000 training and 200,000 validation examples with the input features 'X2X', 'carrier_min_estimate', ’carrier_max_estimate', ‘weight', ‘zip_distance', and ‘handling_days'.
 
 ![image of shipping process](/images/NN.png)
 
@@ -133,17 +135,17 @@ Feature importances learned by XGBoost:
 | `weight`                 | 0.057305            |
 | `package_size`           | 0.020258            |
 
-By far the most importance feature learned by XGBoost is handling days, a feature we engineered from the difference in `acceptance_carrier_timestamp` and `payment_date` (i.e. the number of days between the time the package was accepted by the shipping carrier and the time that the order was placed). Following this, it seems that `weight`, `item_zip`, `buyer_zip` and `carrier_max_estimate` are also important. The only features that XGBoost has learned to have lower or minimal importance are `buyer_zip_median_incom`, `item_zip_pop_density`, `package_size`, `category_id`, `buyer_zip`, `shipping_fee`, and `b2c_c2c`. We can, to some extent, trust that the feature importances learned by XGBoost carry some weight, because the model was able to achieve a loss of 0.50, a large improvement from the linear regression models.
+By far the most importance feature learned by XGBoost is handling days, a feature we engineered from the difference in `acceptance_carrier_timestamp` and `payment_date` (i.e. the number of days between the time the package was accepted by the shipping carrier and the time that the order was placed). Following this, it seems that `weight`, `item_zip`, `buyer_zip` and `carrier_max_estimate` are also important. The only features that XGBoost has learned to have lower or minimal importance are `buyer_zip_median_incom`, `item_zip_pop_density`, `package_size`, `category_id`, `buyer_zip`, `shipping_fee`, and `b2c_c2c`. We can, to some extent, trust that the feature importances learned by XGBoost carry some weight, because the model was able to achieve a loss of 0.50 (the weighted average absolute error of the delivery predictions in days), a large improvement from the linear regression models.
  
 ### CatBoost
 Another tool we used is a random forest/decision tree package called Catboost. This is similar to XGBoost, however it focuses on categorical data (hence the “cat” in Catboost). This is discrete data that represents categories rather than continuous numerical data. This tool was useful to us because several of our important features are categorical, such as zipcodes, package size (small, medium, large), and item type.
 
 According to [Catboost documentation](https://catboost.ai/), the best parameters to fine tune are: learning rate, L2 regularization (coefficient of the L2 regularization term of the cost function), random strength (the amount of randomness to use for scoring splits when the tree structure is selected), bagging temperature (which impacts how random weights are assigned), border count (the number of splits for numerical features), and tree growing policy (which impacts the symmetry of the trees). We used this data to fine tune these parameters in order to obtain better performance on our data. 
 
-Upon a preliminary test of a Catboost model on a subset of our data (20,000 rows) with default parameters, we were able to achieve a loss of 0.49 (using the loss function provided by eBay). This is a promising number, considering the small subset of data used and lack of fine tuning. The contrast of Catboost’s performance shows how a categorically tailored package seems to be a better choice. Catboost also includes an overfitting-detection tool. This stops more trees from being created if the model begins to perform worse. 
+Upon a preliminary test of a Catboost model on a subset of our data (20,000 rows) with default parameters, we were able to achieve a loss of 0.49 (the weighted average absolute error of the delivery predictions in days) using the loss function provided by eBay. This is a promising number, considering the small subset of data used and lack of fine tuning. The contrast of Catboost’s performance shows how a categorically tailored package seems to be a better choice. Catboost also includes an overfitting-detection tool. This stops more trees from being created if the model begins to perform worse. 
 
 ### Loss function
-After training our models, we used the loss function provided by eBay of which the baseline (random guessing) loss is 0.75. This loss function is essentially an average of how many days the prediction was off by, where late predictions are weighted more heavily than early predictions. Our goal was to obtain a loss that is significantly lower than 0.75 for our model. 
+After training our models, we used the loss function provided by eBay of which the baseline (random guessing) loss is 0.75 (the weighted average absolute error of the delivery predictions in days). This loss function is essentially an average of how many days the prediction was off by, where late predictions are weighted more heavily than early predictions. Our goal was to obtain a loss that is significantly lower than 0.75 for our model. 
 
 ### Models
 Once we had cleaned and processed our data, we trained 4 models to compare the results from each one. These models were:
@@ -160,7 +162,7 @@ In our project, we trained four models to try to find the best architecture to p
 
 Comparing these models, we can see that Catboost performed the best. 
 
-With XGBoost, after fine tuning, our loss was 0.51 using eBays provided loss function. 
+With XGBoost, after fine tuning, our loss was 0.51 (the weighted average absolute error of the delivery predictions in days) using eBays provided loss function. 
 Catboost had a loss of ___ after fine tuning. 
 
 | Model      | Loss |
@@ -170,7 +172,7 @@ Catboost had a loss of ___ after fine tuning.
 | XGBoost   | __        |
 | CatBoost   | __        |
 
-
+The resulting quantity loss can be called the (average) loss, the penalty, or the score. Lower loss scores represent better models. It signifies that the model predicts shipping days better according to eBay's loss function, which takes into account whether the model predicted the shipping days to be greater than or fewer than the real shipping days. A greater penalty was placed when models incorrectly predicted the shipping days early, since that renders more customer dissatisfaction.
 
 ## Discussion
 
