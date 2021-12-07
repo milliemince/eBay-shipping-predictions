@@ -64,7 +64,8 @@ Our goal was to use this dataset to create a model that can accurately predict t
 ### Cleaning our data
 To clean our dataset, we first needed to handle irregularities and missing data. To do so, we omitted some examples, and replaced other examples with averages from similar training instances. Many of the data points contained missing entries, so to account for this, we either replaced the entries or deleted them. 
 For example, one of our features, the minimum/maximum transit time that the carrier provided, had many missing entries, so we replaced the missing entries with an estimate that we calculated by obtaining an average transit time based on the shipment_method_id feature associated with that item. We did this for the declared handling days feature as well, using an average from the seller id feature. Finally, we also did this for any missing entries in the weight feature by replacing them with the average weight for shipments that have the same category as the item.
-We also had to clean the data so that all entries were able to be used by the neural network. We converted features that were represented as strings, such as b2c_c2c and package_size, into discrete numeric encodings. We also converted all of the entries in the weight_units feature to the same unit, instead of having a weight feature and a separate unit feature.
+We also had to clean the data so that all entries were able to be used by the neural network. We converted features that were represented as strings, such as `b2c_c2c` and `package_size`, into discrete numeric encodings. For `b2c_c2c`, the original variable format was either ‘B2C’ or ‘C2C’ as strings. We encoded these instead as 0 and 1, respectively. For the `package_size` variable, the original data was symbolic and in the form of ‘LETTER’, ‘LARGE_ENVELOPE’, etc. We coded these to numeric integer values, in increasing value of the general size of the packages described such that the order of the integers had importance.
+We also converted all of the entries in the `weight_units` feature to the same unit, instead of having a weight feature and a separate unit feature.
 
 
 
@@ -74,21 +75,23 @@ Once we had cleaned the data, we also needed to create a new feature that accoun
 ### Feature engineering
 Although we created new features that we thought to be important, we wanted to ensure that those features were necessary for the model. To proceed with this process, we looked at feature importance in both a linear model and a decision tree through XGBoost.
 
-In the linear regression model, we analyzed the coefficients assigned to each input variable. The larger the assigned coefficient, the more ‘important’ the input is for determining the output. We additionally ran a lasso regression for this same purpose, hoping to identify any highly unnecessary inputs and remove over-dependency on highly weighted inputs. However, despite scaling our data, we ran into the issue of having all but one feature assigned a non-zero coefficient. 
+In the linear regression model, we analyzed the coefficients assigned to each input variable. The larger the assigned coefficient, the more ‘important’ the input is for determining the output. We additionally ran a lasso regression for this same purpose, hoping to identify any highly unnecessary inputs and remove over-dependency on highly weighted inputs. However, despite scaling our data, we ran into the issue of having all but one feature assigned a zero or zero-like coefficient. 
 
 We also used XGBoost to delineate the most important features. The features nearest the top of the tree are more important than those near the bottom. We ran multiple trees with multiple combinations of variables to see which ones repeatedly showed up at the top of the tree, despite being paired with other variables. 
+
 
 ## Models
 
 After our data was clean, we began trying different models to see what was most effective and gave the best results.
+
 
 ### Linear Regression Model
 We decided to start with a naive linear regression. Despite knowing that a linear model could probably not correctly learn this large, complex, real-world data set, linear regression is a powerful algorithm that could at least learn relative feature importance. We used two types of linear regression: (1) standard regression without weight decay, and (2) lasso regression (using L2 penalty). Lasso regression has a an L1 weight decay penalty, and thus tends to push irrelevant features’ coefficients to 0. The results of the two linear regression models are as follows:
 
 |       | Test Set Loss |
 | ----------- | ----------- |
-| Standard Linear Regression  | 0.82    |
-| Lasso Regression | 0.89        |
+| Standard Linear Regression (SR)  | 0.82    |
+| Lasso Regression (LR) | 0.89        |
 
 The following table shows the coefficient values learned for each feature in the two regression models:
 
@@ -102,10 +105,10 @@ The following table shows the coefficient values learned for each feature in the
 | SR | 0.0183      | -0.0001    | 0.003    | -9.5e-06 |
 | LR |0.005        | 0.0001     | 0        | 1.9e-06  |
 
-Standard linear regression suggests that `carrier_max_estimate`, `carrier_min_estimate`, and `b2c_c2c` are the most important features. It also learned that `shipping_fee` and quantity are of minimal, but non-zero importance. The remainder of the features are found to have no importance. However, these models do not perform well relative to the benchmark random classifier loss provided by eBay: 0.75. Since the model cannot perform better than random guessing, the feature importances learned from it should be taken with a grain of salt.
+Standard linear regression suggests that `carrier_max_estimate`, `carrier_min_estimate`, and `b2c_c2c` are the most important features. It also learned that `shipping_fee` and quantity are of minimal, but non-zero importance. The remainder of the features are found to have no importance. However, these models do not perform well relative to the benchmark random classifier loss provided by eBay: 0.75. The models only performed better than a random classifier by 0.07 and 0.14 respectively. 
 
 ### Fully Connected Model 
-We additionally created a fully connected model with 3 linear hidden layers of 24, 16, and 8 neurons respectively, each hidden layer followed by the ReLu activation function. Using the custom criterion and Adam as the optimizer with a learning rate of 0.001 and batch size of 128, the model reached a loss of 0.453 after 100 epochs over 800,000 training and 200,000 validation examples with the input features `carrier_min_estimate`, `carrier_max_estimate`, `weight`, `zip_distance`, and `handling_days`.
+We additionally created a fully connected model with 3 linear hidden layers of 24, 16, and 8 neurons respectively, each hidden layer followed by the ReLu activation function. Using the custom criterion and Adam as the optimizer with a learning rate of 0.001 and batch size of 128, the model reached a loss of 0.453 after 100 epochs over 800,000 training and 200,000 validation examples with the input features 'X2X', 'carrier_min_estimate', ’carrier_max_estimate', ‘weight', ‘zip_distance', and ‘handling_days'.
 
 ### XGBoost
 XGBoost is a popular gradient boosting decision tree algorithm that has been featured in the winning submissions of many machine learning competitions. Essentially, XGBoost is an ensemble method that combines several weak learners (the individual decision trees) into a strong one. Gradients come into play when each new tree is built; subsequent trees are fit using the residual errors made by predecessors. Another advantage of XGBoost is its interpretability. Trees are easy to understand, and they are great models for discerning feature importance. The higher up a feature is on the various decision trees, the more important that feature is. As each tree is built, splits are decided based on what “decision” (i.e. is `b2c_c2c` true or false?) best evenly partition the data. This is why features high up in the tree are indicators of the most important features. XGBoost performs well on various datasets, and we wanted to explore how it would perform on the eBay dataset. 
@@ -138,17 +141,16 @@ According to Catboost documentation, the best parameters to fine tune are: learn
 
 Upon a preliminary test of a Catboost model on a subset of our data (20,000 rows) with default parameters, we were able to achieve a loss of 0.49 (using the loss function provided by eBay). This is a promising number, considering the small subset of data used and lack of fine tuning. The contrast of Catboost’s performance shows how a categorically tailored package seems to be a better choice. Catboost also includes an overfitting-detection tool. This stops more trees from being created if the model begins to perform worse. 
 
+### Loss function
+After training our models, we used the loss function provided by eBay of which the baseline (random guessing) loss is 0.75. This loss function is essentially an average of how many days the prediction was off by, where late predictions are weighted more heavily than early predictions. Our goal was to obtain a loss that is significantly lower than 0.75 for our model. 
 
-### Training
+### Models
 Once we had cleaned and processed our data, we trained 4 models to compare the results from each one. These models were:
 
 1. Linear Regression
 2. Fully Connected Neural Network
 3. XGBoost (Decision Tree Gradient Boosting Algorithm)
 4. CatBoost (Another Decision Tree Gradient Boosting Algorithm that deals better with categorical features)
-
-### Loss function
-After training our models, we used the loss function provided by eBay of which the baseline (random guessing) loss is 0.75. This loss function is essentially an average of how many days the prediction was off by, where late predictions are weighted more heavily than early predictions. Our goal was to obtain a loss that is significantly lower than 0.75 for our model. 
 
 
 ## Results
@@ -191,14 +193,14 @@ Our dataset has many categorical features, like `shipment_method_id`, `item_zip`
 
 
 ### Comparison
-TODO
-To see how our work compares to others, we looked at the other competitors in the eBay competition and the leaderboard. 
-Comparing our models to the other teams, we found that our models performed ____
-*insert image of the other competitors' scores after final runs*  
+To see how our work compares to others, we looked at the other competitors in the eBay competition and the leaderboard. It should be noted that our competitors’ results at this time do not necessarily signify the best model possible, for the competition does not end for another month, rather they signify the best competing models at the time of submission of our project.
+Comparing our models to the other teams, we found that our best model (CatBoost) resulted in a loss around the 50th percentile of our competitor’s models. The best competitor’s model had a loss 0.05642352 less than our CatBoost model.
 
 
 ### Ethics Discussion
-One of the key implications of fast shipping is the effect that it has on the environment. The environmental effects of shipping are widespread, affecting everything from air pollution and water pollution to oil spills and excess waste. The increase of fast delivery times and same-day delivery options provided by companies has led to a greater environmental cost such as more trucks on the road, air quality issues, and package waste. Furthermore, there is also a high human labor cost associated with delivery and shipment. The delivery drivers who are responsible for delivering packages to the correct recipients face long shifts without stops, and some companies even encourage fewer stops to prioritize fast shipping. This can lead to detrimental effects as delivery drivers may be incentivized or even forced to provide fast delivery no matter the impact on their wellbeing. It is incredibly important to consider the human impact of fast shipping and prioritize the safety of those who work in the shipping industry.  If eBay were to implement a shipment prediction algorithm, it would be incredibly important to ensure that the model was not predicting shipping times that are too fast, or else it may lead to a greater environmental and human impact.  Finally, there is a positive impact of shopping on eBay compared to other alternatives (such as Amazon). eBay offers many second-hand goods and products, so consumers buying second hand are positively contributing to the environment by creating less waste. By offering pre-owned items, eBay saves items from ending up in the landfill and promotes sustainable shopping. 
+One of the key implications of fast shipping is the effect that it has on the environment. The environmental effects of shipping are widespread, affecting everything from air pollution and water pollution to oil spills and excess waste. The increase of fast delivery times and same-day delivery options provided by companies has led to a greater environmental cost such as more trucks on the road, air quality issues, and package waste. Furthermore, there is also a high human labor cost associated with delivery and shipment. The delivery drivers who are responsible for delivering packages to the correct recipients face long shifts without stops, and some companies even encourage fewer stops to prioritize fast shipping. This can lead to detrimental effects as delivery drivers may be incentivized or even forced to provide fast delivery no matter the impact on their wellbeing. It is incredibly important to consider the human impact of fast shipping and prioritize the safety of those who work in the shipping industry.  If eBay were to implement a shipment prediction algorithm, it would be incredibly important to ensure that the model was not predicting shipping times that are too fast, or else it may lead to a greater environmental and human impact.  Finally, there is a positive impact of shopping on eBay compared to other alternatives (such as Amazon). eBay offers many second-hand goods and products, so consumers buying second hand are positively contributing to the environment by creating less waste. By offering pre-owned items, eBay saves items from ending up in the landfill and promotes sustainable shopping.
+
+Regarding our model specifically, if it were to become deployed we would have to be concerned about a few things. Notably, if our model is wrong and mispredicts delivery times to be way earlier than they actually can be delivered, the actual delivery workers might get wrongfully. It is important to consider how the functionality of our model could impact those who are historically less empowered, including wage workers. 
 
 ## Reflection
 
