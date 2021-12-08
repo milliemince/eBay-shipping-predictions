@@ -109,9 +109,44 @@ The following table shows the coefficient values learned for each feature in the
 Standard linear regression suggests that `carrier_max_estimate`, `carrier_min_estimate`, and `b2c_c2c` are the most important features. It also learned that `shipping_fee` and quantity are of minimal, but non-zero importance. The remainder of the features are found to have no importance. However, these models do not perform well relative to the benchmark random classifier loss provided by eBay: 0.75 (the weighted average absolute error of the delivery predictions in days). The models only performed better than a random classifier by 0.07 and 0.14 respectively. 
 
 ### Fully Connected Model 
-We additionally created a fully connected model with 3 linear hidden layers of 24, 16, and 8 neurons respectively, each hidden layer followed by the ReLu activation function. Using the custom criterion and Adam as the optimizer with a learning rate of 0.001 and batch size of 128, the model reached a loss of 0.453 (the weighted average absolute error of the delivery predictions in days) after 100 epochs over 800,000 training and 200,000 validation examples with the input features 'X2X', 'carrier_min_estimate', ’carrier_max_estimate', ‘weight', ‘zip_distance', and ‘handling_days'.
+We additionally created a fully connected model with 7 hidden layers, each activated using ReLU. With eBay’s criterion and the Adam optimizer, the model performed the best with a learning rate of 0.0001 and a batch size of 256.
+
+After X epochs over about 11,000,000 training and 3,000,000 validation examples, the model reached a loss of Y given the input features `b2c_c2c`, `carrier_min_estimate`, `carrier_max_estimate`, `weight`, `zip_distance`, and `handling_days`.
 
 ![image of shipping process](/images/NN.svg)
+
+To tune each hyperparameter, we trained the model on 150,000 examples over 100 epochs multiple times and compared its losses, adjusting only the hyperparameter that was being tuned and holding all others constant. 
+
+| Learning Rate                | Loss  |
+|------------------------|---------------------|
+| 0.001               | 0.015656            |
+| 0.0001             | 0.047507            |
+| 0.00001 | 0.042284            |
+
+While the run with a learning rate of 0.001 reached the lowest loss, it oscillated for the last 10 epochs, suggesting it would converge too quickly for the final model which would train over more epochs and on significantly more data per epoch. Conversely, the run with a learning rate of 0.00001 spent its last 25 epochs with a stable loss no greater than 0.693, suggesting it reached a local minimum or simply learned at an extremely slow speed. As a result, we chose a learning rate of 0.0001 as, while its run did not reach the lowest loss, it spent its last 10 epochs steadily decreasing in loss, suggesting it might converge at a lower loss than it would with a higher learning rate after more epochs and with more data.
+
+| Batch Size                | Loss  |
+|------------------------|---------------------|
+| 16               | 0.698            |
+| 32             | 0.451         |
+| 64 | 0.452            |
+| 128               | 0.457            |
+| 256             | 0.459            |
+| 512 | 0.499            |
+
+We chose a batch size of 32 as its run reached the lowest loss.
+
+In tuning the architecture, we set a maximum number of neurons in the first hidden layer. The number of neurons in each following layer was half that of the previous until the number of neurons in a layer was 8 in which case that was the last hidden layer. For instance, if the number of neurons in the first hidden layer was 64, the following hidden layers would have 32, 16, and then 8 neurons. 
+
+| Neurons in First Hidden Layer                | Loss  |
+|------------------------|---------------------|
+| 64               | 0.662            |
+| 128             | 0.536        |
+| 256 | 0.463            |
+| 512               | 0.456          |
+| 1024             | 0.457            |
+
+While the run with 1024 neurons in the first layer reached the lowest loss, we chose an architecture with 512 neurons in the first layer as its loss was only marginally higher and required significantly fewer computations per epoch.
 
 ### XGBoost
 XGBoost is a popular gradient boosting decision tree algorithm that has been featured in the winning submissions of many machine learning competitions. Essentially, XGBoost is an ensemble method that combines several weak learners (the individual decision trees) into a strong one. Gradients come into play when each new tree is built; subsequent trees are fit using the residual errors made by predecessors. Another advantage of XGBoost is its interpretability. Trees are easy to understand, and they are great models for discerning feature importance. The higher up a feature is on the various decision trees, the more important that feature is. As each tree is built, splits are decided based on what “decision” (i.e. is `b2c_c2c` true or false?) best evenly partition the data. This is why features high up in the tree are indicators of the most important features. XGBoost performs well on various datasets, and we wanted to explore how it would perform on the eBay dataset. 
