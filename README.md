@@ -123,7 +123,7 @@ To tune each hyperparameter, we trained the model on 150,000 examples over 100 e
 | 0.0001             | 0.533            |
 | 0.00001 | 0.692            |
 
-While the run with a learning rate of 0.001 reached the lowest loss, it oscillated for the last 10 epochs, suggesting it would converge too quickly for the final model which would train over more epochs and on significantly more data per epoch. Conversely, the run with a learning rate of 0.00001 spent its last 25 epochs with a stable loss no greater than 0.693, suggesting it reached a local minimum or simply learned at an extremely slow speed. As a result, we chose a learning rate of 0.0001 as, while its run did not reach the lowest loss, it spent its last 10 epochs steadily decreasing in loss, suggesting it might converge at a lower loss than it would with a higher learning rate after more epochs and with more data.
+While the run with a learning rate of 0.001 reached the lowest loss, it oscillated for the last 10 epochs, suggesting it would converge too quickly for the final model which would train over more epochs and on significantly more data per epoch. Conversely, the run with a learning rate of 0.00001 spent its last 10 epochs with a stable loss no greater than 0.693, suggesting it reached a local minimum or simply learned at an extremely slow speed. As a result, we chose a learning rate of 0.0001 as, while its run did not reach the lowest loss, it spent its last 10 epochs steadily decreasing in loss, suggesting it might converge at a lower loss after more epochs and with more data than it would with a higher learning rate.
 
 | Batch Size                | Loss  |
 |------------------------|---------------------|
@@ -136,7 +136,7 @@ While the run with a learning rate of 0.001 reached the lowest loss, it oscillat
 
 We chose a batch size of 32 as its run reached the lowest loss.
 
-In tuning the architecture, we set a maximum number of neurons in the first hidden layer. The number of neurons in each following layer was half that of the previous until the number of neurons in a layer was 8 in which case that was the last hidden layer. For instance, if the number of neurons in the first hidden layer was 64, the following hidden layers would have 32, 16, and then 8 neurons. 
+In tuning the architecture, we set a maximum number of neurons in the first hidden layer. The number of neurons in each following layer was half that of the previous until the number of neurons in a layer was 8. For instance, if the number of neurons in the first hidden layer was 64, the following hidden layers would have 32, 16, and then 8 neurons. 
 
 | Neurons in First Hidden Layer                | Loss  |
 |------------------------|---------------------|
