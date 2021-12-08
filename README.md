@@ -109,7 +109,7 @@ The following table shows the coefficient values learned for each feature in the
 Standard linear regression suggests that `carrier_max_estimate`, `carrier_min_estimate`, and `b2c_c2c` are the most important features. It also learned that `shipping_fee` and quantity are of minimal, but non-zero importance. The remainder of the features are found to have no importance. However, these models do not perform well relative to the benchmark random classifier loss provided by eBay: 0.75 (the weighted average absolute error of the delivery predictions in days). The models only performed better than a random classifier by 0.07 and 0.14 respectively. 
 
 ### Fully Connected Model 
-We additionally created a fully connected model with 7 hidden layers, each activated using ReLU. With eBay’s criterion and the Adam optimizer, the model performed the best with a learning rate of 0.0001 and a batch size of 256.
+We additionally created a fully connected model with 7 hidden layers, each activated using ReLU. With eBay’s criterion and the Adam optimizer, the model performed the best with a learning rate of 0.0001 and a batch size of Z.
 
 After X epochs over about 11,000,000 training and 3,000,000 validation examples, the model reached a loss of Y given the input features `b2c_c2c`,  `carrier_min_estimate`,  `carrier_max_estimate`,  `weight`,  `zip_distance`, and `handling_days`.
 
