@@ -65,7 +65,7 @@ Our goal was to use this dataset to create a model that can accurately predict t
 
 ### Cleaning our data
 To clean our dataset, we first needed to handle irregularities and missing data. To do so, we omitted some examples, and replaced other examples with averages from similar training instances. Many of the data points contained missing entries, so to account for this, we either replaced the entries or deleted them. 
-For example, one of our features, the minimum/maximum transit time that the carrier provided, had many missing entries, so we replaced the missing entries with an estimate that we calculated by obtaining an average transit time based on the shipment_method_id feature associated with that item. We did this for the declared handling days feature as well, using an average from the seller id feature. Finally, we also did this for any missing entries in the weight feature by replacing them with the average weight for shipments that have the same category as the item.
+For example, one of our features, the minimum/maximum transit time that the carrier provided, had many missing entries, so we replaced the missing entries with an estimate that we calculated by obtaining an average transit time based on the `shipment_method_id` feature associated with that item. We did this for the declared handling days feature as well, using an average from the seller id feature. Finally, we also did this for any missing entries in the weight feature by replacing them with the average weight for shipments that have the same category as the item.
 We also had to clean the data so that all entries were able to be used by the neural network. We converted features that were represented as strings, such as `b2c_c2c` and `package_size`, into discrete numeric encodings. For `b2c_c2c`, the original variable format was either ‘B2C’ or ‘C2C’ as strings. We encoded these instead as 0 and 1, respectively. For the `package_size` variable, the original data was symbolic and in the form of ‘LETTER’, ‘LARGE_ENVELOPE’, etc. We coded these to numeric integer values, in increasing value of the general size of the packages described such that the order of the integers had importance.
 We also converted all of the entries in the `weight_units` feature to the same unit, instead of having a weight feature and a separate unit feature.
 
@@ -203,9 +203,9 @@ Catboost had a loss of ___ after fine tuning.
 | Model      | Loss |
 | ----------- | ----------- |
 | Linear Regression Model      | __       |
-| Fully Connected Neural Network   | 0.453        |
+| Fully Connected Neural Network   | 0.45        |
 | XGBoost   | __        |
-| CatBoost   | __        |
+| CatBoost   | 0.46        |
 
 The resulting quantity loss can be called the (average) loss, the penalty, or the score. Lower loss scores represent better models. It signifies that the model predicts shipping days better according to eBay's loss function, which takes into account whether the model predicted the shipping days to be greater than or fewer than the real shipping days. A greater penalty was placed when models incorrectly predicted the shipping days early, since that renders more customer dissatisfaction.
 
