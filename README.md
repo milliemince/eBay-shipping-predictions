@@ -179,6 +179,33 @@ According to [Catboost documentation](https://catboost.ai/), the best parameters
 
 Upon a preliminary test of a Catboost model on a subset of our data (20,000 rows) with default parameters, we were able to achieve a loss of 0.49 (the weighted average absolute error of the delivery predictions in days) using the loss function provided by eBay. This is a promising number, considering the small subset of data used and lack of fine tuning. The contrast of Catboost’s performance shows how a categorically tailored package seems to be a better choice. Catboost also includes an overfitting-detection tool. This stops more trees from being created if the model begins to perform worse. 
 
+Feature importances learned by Catboost:
+
+| Feature                | Feature Importance  |
+|------------------------|---------------------|
+| `b2c_c2c `               | 0.129            |
+| `seller_id`              | 3.44             |
+| `declared_handling_days` | 0.993            |
+| `shipment_method_id`     | 5.32             |
+| `shipping_fee`           | 0.591            |
+| `carrier_min_estimate`   | 0.07             |
+| `carrier_max_estimate`   | 3.32             |
+| `item_zip `              | 4.06             |
+| `buyer_zip`              | 1.16             |
+| `category_id`            | 0.938            |
+| `item_price`             | 0.701            |
+| `quantity`               | 0.075            |
+| `weight`                 | 0.503            |
+| `package_size`           | 0.380            |
+| `record_number`            | 0.267            |
+| `zip_distance`             | 4.36             |
+| `item_zip_pop_density`     | 0.426            |
+| `item_zip_median_income`   | 0.352            |
+| `buyer_zip_pop_density`    | 0.518            |
+| `buyer_zip_median_income`  | 0.266            |
+| `handling_days`            | 72.1             |
+
+
 ### Loss function
 After training our models, we used the loss function provided by eBay of which the baseline (random guessing) loss is 0.75 (the weighted average absolute error of the delivery predictions in days). This loss function is essentially an average of how many days the prediction was off by, where late predictions are weighted more heavily than early predictions. Our goal was to obtain a loss that is significantly lower than 0.75 for our model. 
 
@@ -205,7 +232,7 @@ Catboost had a loss of ___ after fine tuning.
 | Linear Regression Model      | __       |
 | Fully Connected Neural Network   | 0.45        |
 | XGBoost   | __        |
-| CatBoost   | 0.46        |
+| CatBoost   | 0.453        |
 
 The resulting quantity loss can be called the (average) loss, the penalty, or the score. Lower loss scores represent better models. It signifies that the model predicts shipping days better according to eBay's loss function, which takes into account whether the model predicted the shipping days to be greater than or fewer than the real shipping days. A greater penalty was placed when models incorrectly predicted the shipping days early, since that renders more customer dissatisfaction.
 
