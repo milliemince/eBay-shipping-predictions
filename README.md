@@ -109,7 +109,7 @@ The following table shows the coefficient values learned for each feature in the
 Standard linear regression suggests that `carrier_max_estimate`, `carrier_min_estimate`, and `b2c_c2c` are the most important features. It also learned that `shipping_fee` and quantity are of minimal, but non-zero importance. The remainder of the features are found to have no importance. However, these models do not perform well relative to the benchmark random classifier loss provided by eBay: 0.75 (the weighted average absolute error of the delivery predictions in days). The models only performed better than a random classifier by 0.07 and 0.14 respectively. 
 
 ### Fully Connected Model 
-We additionally created a fully connected model with 7 hidden layers, each activated using ReLU. With eBay’s criterion and the Adam optimizer, the model performed the best with a learning rate of 0.0001 and a batch size of Z.
+We additionally created a fully connected model with 7 hidden layers, each activated using ReLU. With eBay’s criterion and the Adam optimizer, the model performed the best with a learning rate of 0.0001 and a batch size of 256.
 
 After X epochs over about 11,000,000 training and 3,000,000 validation examples, the model reached a loss of Y given the input features `b2c_c2c`,  `carrier_min_estimate`,  `carrier_max_estimate`,  `weight`,  `zip_distance`, and `handling_days`.
 
@@ -134,7 +134,7 @@ While the run with a learning rate of 0.001 reached the lowest loss, it oscillat
 | 256             | 0.459            |
 | 512 | 0.499            |
 
-We chose a batch size of 32 as its run reached the lowest loss.
+We initially chose a batch size of 32 as its run reached the lowest loss. However, the resultant model was extremely slow to train on the full dataset at over 2 hours per epoch. Consequently, we chose a batch size of 256 as the loss achieved during its run was only marginally higher than the loss achieved by the run with a batch size of 32, while requiring significantly fewer computations per epoch.
 
 In tuning the architecture, we set a maximum number of neurons in the first hidden layer. The number of neurons in each following layer was half that of the previous until the number of neurons in a layer was 8. For instance, if the number of neurons in the first hidden layer was 64, the following hidden layers would have 32, 16, and then 8 neurons. 
 
