@@ -1,7 +1,5 @@
-# Predicting eBay Delivery Times 
-## Millie M, Meghna L, Hannah M, Nate D, Indiana H
-
-First Draft
+# Predicting eBay Delivery Times
+Millie Mince, Meghna Lohia, Hannah Mandell, Nate Dailey, and Indiana Huey
 
 ## Abstract
 
@@ -111,7 +109,13 @@ Standard linear regression suggests that `carrier_max_estimate`, `carrier_min_es
 ### Fully Connected Model 
 We additionally created a fully connected model with 7 hidden layers, each activated using ReLU. With eBay’s criterion and the Adam optimizer, the model performed the best with a learning rate of 0.0001 and a batch size of 256.
 
-After X epochs over about 11,000,000 training and 3,000,000 validation examples, the model achieved a loss of Y given the input features `b2c_c2c`,  `carrier_min_estimate`,  `carrier_max_estimate`,  `weight`,  `zip_distance`, and `handling_days`.
+After 125 epochs over about 11,000,000 training and 3,000,000 validation examples, the model achieved a loss of 0.411 given the input features:
+- `b2c_c2c`
+- `carrier_min_estimate`
+- `carrier_max_estimate`
+- `weight`
+- `zip_distance`
+- `handling_days`
 
 ![image of shipping process](/images/NN.svg)
 
