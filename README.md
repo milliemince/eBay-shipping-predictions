@@ -11,7 +11,7 @@ The economy of online shopping is bigger than it has ever been and continues to 
 
 The process of achieving this, however, poses many challenges. In the case of eBay, the majority of transactions are carried out between individual sellers and buyers, often resulting in the data for goods and their delivery being inconsistently recorded. This, in addition to packages being processed by a variety of different delivery services, means that data labels are frequently missing or incorrect. Further, the shipment date is largely left to the sole decision of each individual seller, resulting in a high degree of variability.
 
-![image of shipping process](/images/diagram.png)
+![image of shipping process](/images/diagram2.png)
 
 Our team will provide a solution to these problems and provide a model to enable the accurate prediction of delivery dates using machine learning. Because predicted values are in the range of the number of days between shipment and delivery, we will employ an architecture suitable for a discrete response rather than a continuous one.
 
