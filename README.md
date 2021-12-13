@@ -1,10 +1,10 @@
 # Predicting eBay Delivery Times
 
-#### Millie Mince, Meghna Lohia, Hannah Mandell, Nate Dailey, and Indiana Huey
+Millie Mince, Meghna Lohia, Hannah Mandell, Nate Dailey, and Indiana Huey
 
 ## Abstract
 
-In this paper, we attempted to predict shipment delivery times for eBay from a shipment dataset that they provided. We explore four models (Linear Regression, Fully Connected Neural Network, XGBoost and CatBoost) to compare the effectiveness of the models on shipment data. We also examine different strategies to clean our dataset, engineer new features, and fine-tune each model. Overall, our CatBoost model proved to be the most successful. Looking forward, we suggest investigating models that work best on categorical data or tabular data. 
+In this project, we created and tuned models to predict delivery times for eBay packages given a dataset of eBay shipment records. We implemented four models—linear regression, fully connected neural network, XGBoost, and CatBoost—and compared the their effectiveness on the shipment data. We additionally examined different strategies to clean our dataset, engineer new features, and fine-tune each model. Ultimately, the fully connected model performed the best. 
 
 ## Introduction
 
@@ -14,13 +14,13 @@ The process of achieving this, however, poses many challenges. In the case of eB
 
 ![image of shipping process](/images/diagram2.png)
 
-Our team will provide a solution to these problems and provide a model to enable the accurate prediction of delivery dates using machine learning. Because predicted values are in the range of the number of days between shipment and delivery, we will employ an architecture suitable for a discrete response rather than a continuous one.
+We worked to provide a solution to these problems and provide a model to enable the accurate prediction of delivery dates using machine learning.
 
-To implement our model, a number of decisions will have to be made and tested, including deciding the optimal means by which to clean the data (for instance, whether to omit training data that has missing or incorrect features or to assign it average values based on correctly labeled training data), deciding whether to compute the estimation holistically from shipment to delivery date or to compute multiple separate estimates on separate legs of the delivery process, and deciding which features to include and in which leg.
+To implement our model, a number of decisions were made and tested, including deciding the optimal means by which to clean the data (for instance, whether to omit training data that has missing or incorrect features or to assign it average values based on correctly labeled training data), deciding whether to compute the estimation holistically from shipment to delivery date or to compute multiple separate estimates on separate legs of the delivery process, and deciding which features to include and in which leg.
 
 Should our model have some error, it is important that it produces random rather than systematic error. Specifically, we want to avoid creating a model which might consistently predict early delivery dates, which could lead to sellers and delivery services rushing packages and resulting in the employment of more non-sustainable methods, such as shipping half-full boxes, as well as increasing the pressure on employees to have to work faster and faster.
 
-Ultimately, our ideal model will be able to accurately predict the exact day of delivery 100% of the time and demonstrate which features are the most important in estimating delivery dates.
+Using a loss function of the weighted average absolute error of the delivery predictions in days that was provided by eBay, our model achieved a loss of 0.411 where a loss of 0.759 was the baseline of random guessing.
 
 
 ## Literature Review
@@ -214,31 +214,26 @@ Feature importances learned by Catboost:
 
 
 ### Loss function
-After training our models, we used the loss function provided by eBay of which the baseline (random guessing) loss is 0.75 (the weighted average absolute error of the delivery predictions in days). This loss function is essentially an average of how many days the prediction was off by, where late predictions are weighted more heavily than early predictions. Our goal was to obtain a loss that is significantly lower than 0.75 for our model. 
+After training our models, we used the loss function provided by eBay of which the baseline (random guessing) loss is 0.759 (the weighted average absolute error of the delivery predictions in days). This loss function is essentially an average of how many days the prediction was off by, where late predictions are weighted more heavily than early predictions. Our goal was to obtain a loss that is significantly lower than 0.759 for our model. 
 
 ### Models
 Once we had cleaned and processed our data, we trained 4 models to compare the results from each one. These models were:
 
-1. Linear Regression
-2. Fully Connected Neural Network
-3. XGBoost (Decision Tree Gradient Boosting Algorithm)
-4. CatBoost (Another Decision Tree Gradient Boosting Algorithm that deals better with categorical features)
+1. Linear regression
+2. Fully connected neural network
+3. XGBoost (decision tree gradient boosting algorithm)
+4. CatBoost (another decision tree gradient boosting algorithm that deals better with categorical features)
 
 
 ## Results
 
-In our project, we trained four models to try to find the best architecture to predict shipping times. We ran our cleaned data through each model and compared effectiveness. We compared these models by evaluating the loss for each of them. 
-
-Comparing these models, we can see that Catboost performed the best. 
-
-With XGBoost, after fine tuning, our loss was 0.51 (the weighted average absolute error of the delivery predictions in days) using eBays provided loss function. 
-Catboost had a loss of ___ after fine tuning. 
+Comparing the results of the models, the fully connected model performed the best. 
 
 | Model      | Loss |
 | ----------- | ----------- |
-| Linear Regression Model      | __       |
-| Fully Connected Neural Network   | 0.45        |
-| XGBoost   | __        |
+| Linear Regression Model      | 0.82       |
+| Fully Connected Neural Network   | 0.411        |
+| XGBoost   | 0.50        |
 | CatBoost   | 0.453        |
 
 The resulting quantity loss can be called the (average) loss, the penalty, or the score. Lower loss scores represent better models. It signifies that the model predicts shipping days better according to eBay's loss function, which takes into account whether the model predicted the shipping days to be greater than or fewer than the real shipping days. A greater penalty was placed when models incorrectly predicted the shipping days early, since that renders more customer dissatisfaction.
@@ -265,8 +260,9 @@ Our dataset has many categorical features, like `shipment_method_id`, `item_zip`
 
 
 ### Comparison
-To see how our work compares to others, we looked at the other competitors in the eBay competition and the leaderboard. It should be noted that our competitors’ results at this time do not necessarily signify the best model possible, for the competition does not end for another month, rather they signify the best competing models at the time of submission of our project.
-Comparing our models to the other teams, we found that our best model (CatBoost) resulted in a loss around the 50th percentile of our competitor’s models. The best competitor’s model had a loss 0.05642352 less than our CatBoost model.
+To compare our work with others, we used the leaderboard of losses from other teams participating in the competition. However, it should be noted that the leaderboard may not currently represent the results of the most recent models as the competition does not end for another month and teams may withhold from posting their losses until then.
+
+Currently, our model holds a 0.023 loss lead.
 
 ![image of shipping process](/images/Competitors.png)
 
