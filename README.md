@@ -1,5 +1,6 @@
 # Predicting eBay Delivery Times
-Millie Mince, Meghna Lohia, Hannah Mandell, Nate Dailey, and Indiana Huey
+
+#### Millie Mince, Meghna Lohia, Hannah Mandell, Nate Dailey, and Indiana Huey
 
 ## Abstract
 
