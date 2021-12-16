@@ -244,7 +244,8 @@ The resulting quantity loss can be called the (average) loss, the penalty, or th
 To evaluate our models, we first looked at the features that the models deemed to be the most important. We were able to gather this information for XGBoost and CatBoost. We did this so we could determine whether the models performed well on certain subsets of the data, analyzing whether some subsets had bias, or if XGboost and CatBoost prioritized certain features over others. 
 
 
-
+![xg](/images/xgboost.png)
+![cat](/images/catboost.png)
 
 XGBoost learned many boosted decision trees on random subsets of the data. Features that are evaluated higher up in the trees correspond to the features which the model has learned are more important. We have found that the most important features are `handling_days` and `carrier_max_estimate`, followed by some mid-tier importance features such as `weight`, `zip_distance`, and `shipment_method_id`.
 
