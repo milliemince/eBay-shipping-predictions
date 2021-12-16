@@ -241,14 +241,16 @@ The resulting quantity loss can be called the (average) loss, the penalty, or th
 ## Discussion
 
 ### Model Evaluation: Feature Importance
-To evaluate our models, we first looked at the features that each of the models deemed to be the most important. This is so we can determine whether the models performed well on certain subsets of the data, analyzing whether some subsets had bias, or if different models prioritized certain features over others. 
+To evaluate our models, we first looked at the features that the models deemed to be the most important. We were able to gather this information for XGBoost and CatBoost. We did this so we could determine whether the models performed well on certain subsets of the data, analyzing whether some subsets had bias, or if XGboost and CatBoost prioritized certain features over others. 
 
-’We learned it is possible to determine the most important features in predicting delivery times for the eBay dataset using Random Forests with boosting (using XGBoost). We can look at the weights for each of the features in our dataset after using XGBoost’s decision trees to determine the highest weighted features. 
 
-TODO
-*insert table for feature importance once we complete model runs*
+
 
 XGBoost learned many boosted decision trees on random subsets of the data. Features that are evaluated higher up in the trees correspond to the features which the model has learned are more important. We have found that the most important features are `handling_days` and `carrier_max_estimate`, followed by some mid-tier importance features such as `weight`, `zip_distance`, and `shipment_method_id`.
+
+CatBoost was able to identify a larger set of importance features, which include `seller_id`, `shipment_method_id`, `carrier_max_estimate`, `item_zip`, and `zip_distance`. It makes sense that CatBoost was able to learn the importance of `seller_id`, `shipment_method_id`, and `item_zip` because these are categorical features. This was exactly our motivation for using CatBoost, so this indicates that was a good decision.
+
+In these graphs, we removed the `handling_days` feature that we engineered, but XGBoost and CatBoost both learned that it was by far the most important feature. We engineered this feature by calculating the difference in days between the time the carrier accepted the package from the seller and the time the order was placed. Because the magnitude of importance was so much higher, it made these bar graphs uninterpretable, so we have simply removed that feature from the graph.
 
 ### Model Evaluation: Predictions
 
