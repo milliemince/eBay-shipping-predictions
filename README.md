@@ -252,12 +252,11 @@ XGBoost learned many boosted decision trees on random subsets of the data. Featu
 
 ### Model Evaluation: Predictions
 
-We also wanted to compare how the models might differ in effectiveness or use case. To do so, we can look at the kinds of predictions that each model made to see if there are any key differences. We created a scatter plot of predicted vs actual shipping dates, categorized by product category or price to look at our predictions for each model.
+We also wanted to compare how the models might differ in effectiveness. To do so, we can look at the loss by each model compared visually to each other as well as the eBay benchmark. 
 
-*insert scatter plot once we complete our model runs*
+In this graph, we can compare the losses of each model and also look at eBay's benchmark, which is represented by the red line. We included the benchmark because it can help us visualize whether the models made meaningful predictions (better than a random guess). We can see that CatBoost and the Fully Connected Neural Network performed the best, and XGBoost was also effective as a close third option. 
 
-Our dataset has many categorical features, like `shipment_method_id`, `item_zip`, `buyer_zip`, and `b2c_c2c`. XGBoost performed relatively well, which motivated finding a similar algorithm that could better handle these categorical features. Our findings (even before fine tuning CatBoost) show that this is true.
-
+Our dataset has many categorical features, like `shipment_method_id`, `item_zip`, `buyer_zip`, and `b2c_c2c`. XGBoost and CatBoost performed relatively well, which motivated using a similar algorithm that could better handle these categorical features. We also fine-tuned our Fully Connected Model and found that our fine tuning improved the model considerably. We believe this is the main reason why our FC NN had the best performance. 
 
 ### Comparison
 To compare our work with others, we used the leaderboard of losses from other teams participating in the competition. However, it should be noted that the leaderboard may not currently represent the results of the most recent models as the competition does not end for another month and teams may withhold from posting their losses until then.
