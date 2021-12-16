@@ -254,7 +254,9 @@ XGBoost learned many boosted decision trees on random subsets of the data. Featu
 
 We also wanted to compare how the models might differ in effectiveness. To do so, we can look at the loss by each model compared visually to each other as well as the eBay benchmark. 
 
-In this graph, we can compare the losses of each model and also look at eBay's benchmark, which is represented by the red line. We included the benchmark because it can help us visualize whether the models made meaningful predictions (better than a random guess). We can see that CatBoost and the Fully Connected Neural Network performed the best, and XGBoost was also effective as a close third option. 
+![loss](/images/loss_by_model.png)
+
+In this graph, we  compare the losses of each model and also look at eBay's benchmark, which is represented by the red line. We included the benchmark because it can help us visualize whether the models made meaningful predictions (better than a random guess). We can see that CatBoost and the Fully Connected Neural Network performed the best, and XGBoost was also effective as a close third option. 
 
 Our dataset has many categorical features, like `shipment_method_id`, `item_zip`, `buyer_zip`, and `b2c_c2c`. XGBoost and CatBoost performed relatively well, which motivated using a similar algorithm that could better handle these categorical features. We also fine-tuned our Fully Connected Model and found that our fine tuning improved the model considerably. We believe this is the main reason why our FC NN had the best performance. 
 
